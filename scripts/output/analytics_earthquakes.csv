@@ -1,0 +1,30 @@
+earthquake_id,occurred_at,latitude,longitude,depth_km,magnitude,magnitude_type,place,country,region,magnitude_category,depth_category,risk_level,day_of_week,hour_of_day
+us7000resq,2025-11-30 23:16:37,-2.9401,130.1521,10.0,4.9,mww,"137 km ENE of Masohi, Indonesia",Other, Indonesia,Light,Shallow,Low,Sunday   ,23
+ak2025xoytuk,2025-11-30 22:06:04,60.654583,-150.842346,44.51,2.9,ml,"13 km NNW of Sterling, Alaska",Other, Alaska,Minor,Shallow,Low,Sunday   ,22
+us7000resg,2025-11-30 21:55:33,40.6051,-106.3501,10.62,2.7,ml,"15 km SSW of Walden, Colorado",Other, Colorado,Minor,Shallow,Low,Sunday   ,21
+nc75272296,2025-11-30 19:09:49,40.211834,-125.965332,5.43,2.92,md,"143 km W of Petrolia, CA",Other, CA,Minor,Shallow,Low,Sunday   ,19
+pr71501088,2025-11-30 17:32:32,17.932,-68.464,73.27,3.34,md,"51 km SSE of Boca de Yuma, Dominican Republic",Other, Dominican Republic,Light,Intermediate,Low,Sunday   ,17
+us7000rern,2025-11-30 17:25:49,38.1993,141.8636,53.84,4.6,mwr,"45 km SE of Onagawa Chō, Japan",Japan, Japan,Light,Shallow,Low,Sunday   ,17
+us7000rerf,2025-11-30 16:23:05,18.8237,145.7088,199.29,4.8,mb,"Pagan region, Northern Mariana Islands",Other, Northern Mariana Islands,Light,Intermediate,Low,Sunday   ,16
+uw62215926,2025-11-30 15:53:36,48.802667,-119.523333,16.43,2.77,ml,"8 km ESE of Loomis, Washington",Other, Washington,Minor,Shallow,Low,Sunday   ,15
+nc75272216,2025-11-30 15:17:52,38.478832,-119.511665,6.55,2.61,md,"5 km SW of Walker, CA",Other, CA,Minor,Shallow,Low,Sunday   ,15
+nc75272211,2025-11-30 14:56:07,39.431168,-122.135834,27.78,3.11,ml,"11 km SSE of Willows, CA",Other, CA,Light,Shallow,Low,Sunday   ,14
+us7000reqt,2025-11-30 12:24:44,52.0899,-172.4497,63.74,4.3,mb,"120 km E of Atka, Alaska",Other, Alaska,Light,Shallow,Low,Sunday   ,12
+us7000reqv,2025-11-30 12:18:13,-56.1341,-143.8864,10.0,4.9,mb,Pacific-Antarctic Ridge,Other,Pacific-Antarctic Ridge,Light,Shallow,Low,Sunday   ,12
+ak2025xodyui,2025-11-30 11:38:14,59.937691,-152.528442,90.23,2.72,ml,"42 km WNW of Anchor Point, Alaska",Other, Alaska,Minor,Intermediate,Low,Sunday   ,11
+us7000reqj,2025-11-30 10:36:39,-2.1694,139.1243,10.0,4.4,mb,"174 km WNW of Abepura, Indonesia",Other, Indonesia,Light,Shallow,Low,Sunday   ,10
+us7000reqc,2025-11-30 10:05:37,-27.3264,-176.5272,35.0,5.3,mb,Kermadec Islands region,Other,Kermadec Islands region,Moderate,Shallow,Medium,Sunday   ,10
+us7000reqa,2025-11-30 09:48:41,66.5637,-140.9936,10.0,2.8,ml,"121 km E of Chalkyitsik, Alaska",Other, Alaska,Minor,Shallow,Low,Sunday   ,9
+us7000req8,2025-11-30 08:38:34,-25.6501,179.654,508.92,4.4,mb,south of the Fiji Islands,Other,south of the Fiji Islands,Light,Deep,Low,Sunday   ,8
+us7000req4,2025-11-30 08:31:49,-1.8922,128.8467,10.0,4.7,mb,"156 km N of Masohi, Indonesia",Other, Indonesia,Light,Shallow,Low,Sunday   ,8
+ak2025xnxtik,2025-11-30 08:30:56,51.216778,-178.218109,15.43,3.61,ml,"131 km SW of Adak, Alaska",Other, Alaska,Light,Shallow,Low,Sunday   ,8
+us7000req1,2025-11-30 07:53:40,-17.3056,-70.6756,120.52,4.3,mb,"21 km NW of Ilabaya, Peru",Other, Peru,Light,Intermediate,Low,Sunday   ,7
+us7000repz,2025-11-30 07:32:15,43.6833,-127.7197,10.0,3.0,ml,"275 km WNW of Bandon, Oregon",Other, Oregon,Light,Shallow,Low,Sunday   ,7
+us7000repy,2025-11-30 07:25:47,-8.4978,112.9248,144.96,4.4,mb,"37 km SSE of Dampit, Indonesia",Other, Indonesia,Light,Intermediate,Low,Sunday   ,7
+pr71501023,2025-11-30 07:00:29,18.3755,-66.043667,98.58,3.26,md,"4 km WNW of Trujillo Alto, Puerto Rico",Other, Puerto Rico,Light,Intermediate,Low,Sunday   ,7
+ak2025xnuefh,2025-11-30 06:42:52,53.117271,-164.512756,20.92,3.59,ml,"140 km SE of Akutan, Alaska",Other, Alaska,Light,Shallow,Low,Sunday   ,6
+hv74842362,2025-11-30 04:39:33,19.208,-155.491669,31.63,3.35,ml,"1 km WNW of Pāhala, Hawaii",Other, Hawaii,Light,Shallow,Low,Sunday   ,4
+pr71501008,2025-11-30 03:45:53,18.021167,-66.834,16.49,2.99,md,"2 km SE of Yauco, Puerto Rico",Other, Puerto Rico,Minor,Shallow,Low,Sunday   ,3
+us7000rep2,2025-11-30 02:51:46,-28.4984,-69.1533,98.04,4.5,mb,"96 km WNW of Vinchina, Argentina",Other, Argentina,Light,Intermediate,Low,Sunday   ,2
+ci41129711,2025-11-30 02:00:18,32.850666,-118.457832,4.16,2.99,ml,"11 km WNW of San Clemente Is. (SE tip), CA",Other, CA,Minor,Shallow,Low,Sunday   ,2
+us7000renk,2025-11-30 00:08:39,37.2635,-97.9483,5.0,2.9,ml,"5 km WSW of Danville, Kansas",Other, Kansas,Minor,Shallow,Low,Sunday   ,0

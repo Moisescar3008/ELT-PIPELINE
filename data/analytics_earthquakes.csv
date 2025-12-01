@@ -1,0 +1,1 @@
+id,earthquake_id,occurred_at,latitude,longitude,depth_km,magnitude,magnitude_type,place,country,region,magnitude_category,depth_category,risk_level,day_of_week,hour_of_day,transformed_at

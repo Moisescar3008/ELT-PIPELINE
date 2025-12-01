@@ -1,11 +1,16 @@
-# Earthquake Analytics Dashboard
+# Earthquake Analytics Dashboard - CORRECTED VERSION
 # Phase 3: Visualization using analytics_earthquakes table
 
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import seaborn as sns
 import psycopg2
 from datetime import datetime
+import os
+
+# Create output directory
+os.makedirs('output', exist_ok=True)
 
 # Set style
 plt.style.use('seaborn-v0_8-darkgrid')
@@ -48,11 +53,26 @@ def load_analytics_data():
     conn.close()
     return df
 
+# Export data to CSV
+def export_to_csv(df):
+    df.to_csv('output/analytics_earthquakes.csv', index=False)
+    print("✅ Data exported to 'output/analytics_earthquakes.csv'")
+    
+    # Also export raw data
+    conn = get_connection()
+    df_raw = pd.read_sql("SELECT * FROM raw_earthquakes", conn)
+    df_raw.to_csv('output/raw_earthquakes.csv', index=False)
+    conn.close()
+    print("✅ Raw data exported to 'output/raw_earthquakes.csv'")
+
 # Load data
 print("Loading earthquake data from analytics table...")
 df = load_analytics_data()
 print(f"Total earthquakes loaded: {len(df)}")
 print(f"Date range: {df['occurred_at'].min()} to {df['occurred_at'].max()}")
+
+# Export to CSV
+export_to_csv(df)
 
 # ============================================
 # KEY PERFORMANCE INDICATORS (KPIs)
@@ -64,9 +84,9 @@ print("="*60)
 kpi_total = len(df)
 kpi_high_risk = len(df[df['risk_level'] == 'High'])
 kpi_avg_magnitude = df['magnitude'].mean()
-kpi_most_active_region = df['region'].value_counts().index[0]
+kpi_most_active_region = df['region'].value_counts().index[0] if len(df) > 0 else "N/A"
 
-print(f"📊 Total Earthquakes (Last 30 days): {kpi_total:,}")
+print(f"📊 Total Earthquakes: {kpi_total:,}")
 print(f"⚠️  High-Risk Events: {kpi_high_risk}")
 print(f"📈 Average Magnitude: {kpi_avg_magnitude:.2f}")
 print(f"🌍 Most Active Region: {kpi_most_active_region}")
@@ -88,7 +108,7 @@ ax1.set_xlabel('Magnitude Category')
 ax1.set_ylabel('Count')
 ax1.tick_params(axis='x', rotation=45)
 for i, v in enumerate(magnitude_counts.values):
-    ax1.text(i, v + 5, str(v), ha='center', fontweight='bold')
+    ax1.text(i, v + 0.5, str(v), ha='center', fontweight='bold')
 
 # Chart 2: Risk Level Distribution (Pie Chart)
 ax2 = plt.subplot(2, 3, 2)
@@ -106,7 +126,7 @@ ax3.set_title('Top 10 Countries by Earthquake Count', fontsize=14, fontweight='b
 ax3.set_xlabel('Count')
 ax3.set_ylabel('Country')
 for i, v in enumerate(top_countries.values):
-    ax3.text(v + 2, i, str(v), va='center', fontweight='bold')
+    ax3.text(v + 0.5, i, str(v), va='center', fontweight='bold')
 
 # Chart 4: Magnitude vs Depth (Scatter Plot)
 ax4 = plt.subplot(2, 3, 4)
@@ -129,7 +149,7 @@ ax5.set_xlabel('Depth Category')
 ax5.set_ylabel('Count')
 ax5.tick_params(axis='x', rotation=45)
 for i, v in enumerate(depth_counts.values):
-    ax5.text(i, v + 5, str(v), ha='center', fontweight='bold')
+    ax5.text(i, v + 0.5, str(v), ha='center', fontweight='bold')
 
 # Chart 6: Earthquakes by Hour of Day
 ax6 = plt.subplot(2, 3, 6)
@@ -144,8 +164,8 @@ ax6.grid(True, alpha=0.3)
 ax6.fill_between(hourly_counts.index, hourly_counts.values, alpha=0.3, color='#e74c3c')
 
 plt.tight_layout()
-plt.savefig('earthquake_dashboard.png', dpi=300, bbox_inches='tight')
-print("\n✅ Dashboard saved as 'earthquake_dashboard.png'")
+plt.savefig('output/earthquake_dashboard.png', dpi=300, bbox_inches='tight')
+print("\n✅ Dashboard saved as 'output/earthquake_dashboard.png'")
 plt.show()
 
 # ============================================
@@ -180,36 +200,87 @@ if len(high_risk) > 0:
     ax2.grid(True, alpha=0.3, axis='y')
     
     plt.tight_layout()
-    plt.savefig('high_risk_analysis.png', dpi=300, bbox_inches='tight')
-    print("\n✅ High-risk analysis saved as 'high_risk_analysis.png'")
+    plt.savefig('output/high_risk_analysis.png', dpi=300, bbox_inches='tight')
+    print("\n✅ High-risk analysis saved as 'output/high_risk_analysis.png'")
     plt.show()
 else:
     print("\n✅ No high-risk earthquakes in this period (magnitude < 6.0 or depth > 70km)")
 
 # ============================================
-# TIME SERIES ANALYSIS
+# TIME SERIES ANALYSIS - CORRECTED
 # ============================================
 
 print("\n" + "="*60)
 print("TIME SERIES ANALYSIS")
 print("="*60)
 
-# Daily earthquake count
-df['date'] = pd.to_datetime(df['occurred_at']).dt.date
-daily_counts = df.groupby('date').size()
+# Convert to datetime
+df['datetime'] = pd.to_datetime(df['occurred_at'])
+df['date'] = df['datetime'].dt.date
 
-fig3, ax = plt.subplots(figsize=(16, 6))
-ax.plot(daily_counts.index, daily_counts.values, marker='o', linewidth=2, markersize=6, color='#3498db')
-ax.fill_between(range(len(daily_counts)), daily_counts.values, alpha=0.3, color='#3498db')
-ax.set_title('Daily Earthquake Activity', fontsize=14, fontweight='bold')
-ax.set_xlabel('Date')
-ax.set_ylabel('Number of Earthquakes')
-ax.grid(True, alpha=0.3)
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.savefig('time_series.png', dpi=300, bbox_inches='tight')
-print("✅ Time series plot saved as 'time_series.png'")
-plt.show()
+# Check how many unique dates we have
+unique_dates = df['date'].nunique()
+print(f"Data spans {unique_dates} unique day(s)")
+
+if unique_dates == 1:
+    # Single day: show hourly activity
+    print("Showing HOURLY activity (single day of data)")
+    
+    hourly_data = df.set_index('datetime').resample('H').size()
+    
+    fig3, ax = plt.subplots(figsize=(16, 6))
+    
+    ax.plot(hourly_data.index, hourly_data.values, 
+            marker='o', linewidth=2, markersize=8, color='#3498db')
+    ax.fill_between(hourly_data.index, hourly_data.values, 
+                    alpha=0.3, color='#3498db')
+    
+    ax.set_title(f'Hourly Earthquake Activity - {df["date"].iloc[0]}', 
+                 fontsize=14, fontweight='bold')
+    ax.set_xlabel('Time (UTC)')
+    ax.set_ylabel('Number of Earthquakes')
+    ax.grid(True, alpha=0.3)
+    
+    # Format x-axis
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+    plt.savefig('output/hourly_activity.png', dpi=300, bbox_inches='tight')
+    print("✅ Hourly activity plot saved as 'output/hourly_activity.png'")
+    plt.show()
+    
+else:
+    # Multiple days: show daily activity
+    print("Showing DAILY activity (multiple days of data)")
+    
+    daily_counts = df.groupby('date').size().sort_index()
+    dates = pd.to_datetime(daily_counts.index)
+    
+    fig3, ax = plt.subplots(figsize=(16, 6))
+    
+    ax.plot(dates, daily_counts.values, 
+            marker='o', linewidth=2, markersize=8, color='#3498db')
+    ax.fill_between(dates, daily_counts.values, alpha=0.3, color='#3498db')
+    
+    ax.set_title('Daily Earthquake Activity', fontsize=14, fontweight='bold')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Number of Earthquakes')
+    ax.grid(True, alpha=0.3)
+    
+    # Format x-axis
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+    if unique_dates <= 7:
+        ax.xaxis.set_major_locator(mdates.DayLocator(interval=1))
+    else:
+        ax.xaxis.set_major_locator(mdates.DayLocator(interval=max(1, unique_dates//10)))
+    
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+    plt.savefig('output/daily_activity.png', dpi=300, bbox_inches='tight')
+    print("✅ Daily activity plot saved as 'output/daily_activity.png'")
+    plt.show()
 
 # ============================================
 # SOCIAL/ENVIRONMENTAL IMPACT INSIGHTS
@@ -219,16 +290,18 @@ print("\n" + "="*60)
 print("SOCIAL & ENVIRONMENTAL IMPACT INSIGHTS")
 print("="*60)
 
-print("""
+shallow_pct = (len(df[df['depth_category'] == 'Shallow']) / len(df) * 100) if len(df) > 0 else 0
+
+print(f"""
 🌍 KEY FINDINGS & SOCIAL IMPACT:
 
 1. URBAN PLANNING INSIGHTS:
    - Regions with frequent seismic activity require stricter building codes
-   - {most_active} shows highest activity and needs infrastructure reinforcement
+   - {kpi_most_active_region} shows highest activity and needs infrastructure reinforcement
    
 2. EMERGENCY PREPAREDNESS:
-   - {high_risk_count} high-risk events require immediate response protocols
-   - Average magnitude of {avg_mag:.2f} indicates need for public awareness campaigns
+   - {kpi_high_risk} high-risk events require immediate response protocols
+   - Average magnitude of {kpi_avg_magnitude:.2f} indicates need for public awareness campaigns
    
 3. POLICY RECOMMENDATIONS:
    - Shallow earthquakes (< 70km) pose greater surface damage risk
@@ -249,12 +322,7 @@ BENEFICIARIES:
 ✓ Citizens: Risk awareness and safety education
 ✓ Insurance Industry: Accurate risk modeling
 ✓ Scientific Community: Seismological research advancement
-""".format(
-    most_active=kpi_most_active_region,
-    high_risk_count=kpi_high_risk,
-    avg_mag=kpi_avg_magnitude,
-    shallow_pct=(len(df[df['depth_category'] == 'Shallow']) / len(df) * 100)
-))
+""")
 
 print("\n" + "="*60)
 print("WHY ELT WAS IDEAL FOR THIS PROJECT")
@@ -287,10 +355,16 @@ print("""
 print("\n" + "="*60)
 print("Dashboard generation complete! ✅")
 print("="*60)
-print("\nGenerated files:")
+print("\nGenerated files in 'output/' directory:")
 print("  1. earthquake_dashboard.png - Main dashboard with 6 charts")
-print("  2. high_risk_analysis.png - High-risk event analysis")
-print("  3. time_series.png - Daily earthquake activity trends")
+if len(high_risk) > 0:
+    print("  2. high_risk_analysis.png - High-risk event analysis")
+if unique_dates == 1:
+    print("  3. hourly_activity.png - Hourly earthquake activity")
+else:
+    print("  3. daily_activity.png - Daily earthquake activity trends")
+print("  4. analytics_earthquakes.csv - Transformed data export")
+print("  5. raw_earthquakes.csv - Raw data export")
 print("\nThese visualizations use ONLY the analytics_earthquakes table,")
 print("demonstrating proper ELT architecture with separated concerns.")
 print("="*60)
